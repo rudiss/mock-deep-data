@@ -9,7 +9,7 @@ const readStream = fs.createReadStream('./data.json');
 const parseStream = json.createParseStream();
 readStream.pipe(parseStream);
 
-app.get('/api/clusters', (req, res) => {
+app.get('/api', (req, res) => {
   res.setHeader('Content-Type', 'text/html');
   res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
   parseStream.on('data', function (pojo) {
