@@ -1,5 +1,5 @@
-const express = require('express')
-const app = express()
+
+const app = require('express')();
 const port = 3030
 const fs = require('fs');
 const path = require('path');
@@ -9,7 +9,9 @@ const readStream = fs.createReadStream('./data.json');
 const parseStream = json.createParseStream();
 readStream.pipe(parseStream);
 
-app.get('/', (req, res) => {
+app.get('/api/clusters', (req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
   parseStream.on('data', function (pojo) {
     const output = {};
     for (const key in pojo) {
@@ -23,3 +25,4 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
+module.exports = app;
