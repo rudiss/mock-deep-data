@@ -17,7 +17,7 @@ app.get('/api', (req, res) => {
     for (const key in pojo) {
       output[key.replace(/ /g, '_')] = pojo[key];
     }
-    res.send([output])
+    res.json([output])
 });
 })
 
