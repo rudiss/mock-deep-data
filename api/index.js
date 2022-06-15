@@ -1,4 +1,3 @@
-
 const app = require('express')();
 const port = 3030
 const fs = require('fs');
@@ -10,15 +9,35 @@ const parseStream = json.createParseStream();
 readStream.pipe(parseStream);
 
 app.get('/api', (req, res) => {
-  res.setHeader('Content-Type', 'text/html');
-  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
-  parseStream.on('data', function (pojo) {
-    const output = {};
-    for (const key in pojo) {
-      output[key.replace(/ /g, '_')] = pojo[key];
-    }
-    res.json([output])
-});
+  try {
+
+
+    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+    //   parseStream.on('data', function (pojo) {
+    //     const output = {};
+    //     for (const key in pojo) {
+    //       output[key.replace(/ /g, '_')] = pojo[key];
+    //     }
+    //     res.json([output])
+    // });
+
+    res.json([{
+      id: 1,
+      name: 'John'
+    }, {
+      id: 2,
+      name: 'Jane'
+    }, {
+      id: 3,
+      name: 'Bob'
+    }, {
+      id: 4,
+      name: 'Mary'
+    }]);
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 app.listen(port, () => {
