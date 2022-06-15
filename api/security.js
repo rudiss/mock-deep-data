@@ -2,12 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const fs = require('fs');
-const path = require('path');
+// const path = require('path');
 const json = require('big-json');
-
-const readStream = fs.createReadStream('./data.json');
-const parseStream = json.createParseStream();
-readStream.pipe(parseStream);
 
 
 /** 
@@ -24,6 +20,10 @@ router.get('/', async (req, res) => {
     res.setHeader('Content-Type', 'text/html');
     res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
 
+    const readStream = fs.createReadStream(`${__dirname}/data.json`);
+    const parseStream = json.createParseStream();
+    readStream.pipe(parseStream);
+
     parseStream.on('data', function (pojo) {
       const output = {};
       for (const key in pojo) {
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
       }
       res.json({
         status: 200,
-        data: [output]
+        data: [output],
       })
     });
 
