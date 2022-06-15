@@ -18,6 +18,7 @@ const data = require('./data.json');
 
 
 const paginator = (items, page, per_page) => {
+  let formattedData = []
 
   var page = page || 1,
     per_page = per_page || 10,
@@ -25,6 +26,23 @@ const paginator = (items, page, per_page) => {
 
     paginatedItems = items.slice(offset).slice(0, per_page),
     total_pages = Math.ceil(items.length / per_page);
+
+
+  for (const key in paginatedItems) {
+
+    console.log(paginatedItems[key], '\n');
+
+
+    output = {};
+    const items = Object.keys(paginatedItems[key]).forEach((mapKey, index) => {
+      output[mapKey.replace(/ /g, '_').toLowerCase()] = Object.values(paginatedItems[key])[index]
+    })
+    formattedData.push(output);
+  }
+
+
+
+
   return {
     page: page,
     per_page: per_page,
@@ -32,7 +50,7 @@ const paginator = (items, page, per_page) => {
     next_page: (total_pages > page) ? page + 1 : null,
     total: items.length,
     total_pages: total_pages,
-    data: paginatedItems
+    data: formattedData
   };
 }
 
@@ -44,10 +62,16 @@ router.get('/', async (req, res) => {
     const readStream = fs.createReadStream(`${__dirname}/data.json`);
     const parseStream = json.createParseStream();
 
-    console.log(readStream);
+
     readStream.pipe(parseStream);
 
     parseStream.on('data', function (items) {
+      // const output = {};
+      // for (const key in pojo) {
+      //   output[key.replace(/ /g, '_')] = pojo[key];
+      // }
+
+
       res.json({
         status: 200,
         data: paginator(data, req.query.page || 1, req.query.per_page || 10),
