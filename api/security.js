@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const fs = require('fs');
-// const path = require('path');
+
 const json = require('big-json');
+const data = require('./data.json');
 
 
 /** 
@@ -15,6 +16,26 @@ const json = require('big-json');
  */
 
 
+
+const paginator = (items, page, per_page) => {
+
+  var page = page || 1,
+    per_page = per_page || 10,
+    offset = (page - 1) * per_page,
+
+    paginatedItems = items.slice(offset).slice(0, per_page),
+    total_pages = Math.ceil(items.length / per_page);
+  return {
+    page: page,
+    per_page: per_page,
+    pre_page: page - 1 ? page - 1 : null,
+    next_page: (total_pages > page) ? page + 1 : null,
+    total: items.length,
+    total_pages: total_pages,
+    data: paginatedItems
+  };
+}
+
 router.get('/', async (req, res) => {
   try {
     res.setHeader('Content-Type', 'text/html');
@@ -22,16 +43,14 @@ router.get('/', async (req, res) => {
 
     const readStream = fs.createReadStream(`${__dirname}/data.json`);
     const parseStream = json.createParseStream();
+
+    console.log(readStream);
     readStream.pipe(parseStream);
 
-    parseStream.on('data', function (pojo) {
-      const output = {};
-      for (const key in pojo) {
-        output[key.replace(/ /g, '_')] = pojo[key];
-      }
+    parseStream.on('data', function (items) {
       res.json({
         status: 200,
-        data: [output],
+        data: paginator(data, req.query.page || 1, req.query.per_page || 10),
       })
     });
 
