@@ -2,8 +2,12 @@
   "name": "application-name",
   "version": "0.0.1",
   "private": true,
+  "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
-    "start": "node api/index.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "big-json": "^3.1.0",
