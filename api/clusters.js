@@ -7,8 +7,8 @@ const json = require('big-json');
 const data = require('./data.json');
 
 
-/** 
- * @api {get} /api/security/ Get security data 
+/**
+ * @api {get} /api/security/ Get security data
  * @apiName GetSecurityData\
  * @apiGroup Security
  * @apiVersion 1.0.0
@@ -21,7 +21,7 @@ const paginator = (items, page, per_page) => {
   let formattedData = []
 
   var page = page || 1,
-    per_page = per_page || 10,
+    per_page = per_page || 50,
     offset = (page - 1) * per_page,
 
     paginatedItems = items.slice(offset).slice(0, per_page),
