@@ -3,7 +3,7 @@ var cors = require('cors')
 const app = express();
 const clusters = require('./api/clusters');
 const PORT = process.env.PORT || 5050;
-
+const path = require('path');
 app.use(cors())
 
 app.use(express.static('public'))

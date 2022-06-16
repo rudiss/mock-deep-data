@@ -40,9 +40,6 @@ const paginator = (items, page, per_page) => {
     formattedData.push(output);
   }
 
-
-
-
   return {
     page: page,
     per_page: per_page,
@@ -68,7 +65,7 @@ router.get('/', async (req, res) => {
     parseStream.on('data', function (items) {
       res.json({
         status: 200,
-        data: paginator(data, req.query.page || 1, req.query.per_page || 10),
+        data: paginator(data, req.query.page || 1, req.query.per_page || 50),
       })
     });
 
