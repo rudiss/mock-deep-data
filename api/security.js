@@ -56,7 +56,7 @@ const paginator = (items, page, per_page) => {
 
 router.get('/', async (req, res) => {
   try {
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Content-Type', 'application/json');
     res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
 
     const readStream = fs.createReadStream(`${__dirname}/data.json`);
@@ -66,12 +66,6 @@ router.get('/', async (req, res) => {
     readStream.pipe(parseStream);
 
     parseStream.on('data', function (items) {
-      // const output = {};
-      // for (const key in pojo) {
-      //   output[key.replace(/ /g, '_')] = pojo[key];
-      // }
-
-
       res.json({
         status: 200,
         data: paginator(data, req.query.page || 1, req.query.per_page || 10),
